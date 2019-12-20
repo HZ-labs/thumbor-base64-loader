@@ -3,14 +3,17 @@
 
 from thumbor.loaders import http_loader
 from tornado.concurrent import return_future
+from thumbor.utils import logger
 import base64
 
 
 def decode_url(url):
     url = http_loader.quote_url(url)
     try:
-        urlSafeEncodedBytes = base64.urlsafe_b64decode(url)
-        return str(urlSafeEncodedBytes)
+        url_bytes = url.encode('ascii')
+        urlSafeEncodedBytes = base64.urlsafe_b64decode(url_bytes)
+        urlSafeEncodedStr = str(urlSafeEncodedBytes)
+        return urlSafeEncodedStr.decode('ascii')
     except:
         return url
 
